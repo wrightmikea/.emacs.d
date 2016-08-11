@@ -1,6 +1,6 @@
 * Andreas Gerler Emacs config
-Feel free to use my emacs configuration.
-Fetch and run =make_emacsconfig.sh=
+This is a stripped down version of my emacs configuration.
+Might be useful for starters.
 Have a look at [[bba.org]] as this is the main configuration file.
 
 Enjoy! :-)

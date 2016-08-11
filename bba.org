@@ -199,7 +199,6 @@ Keep track of your important stuff!
           (shell-command "git --work-tree ~/workorg/ --git-dir ~/workorg/.git commit -a -m 'autocommit'")
           (shell-command "git --work-tree ~/workorg/ --git-dir ~/workorg/.git push origin")
           ))
-    (setq twittering-cert-file nil)
     (kill-emacs)
     )
 
@@ -263,18 +262,6 @@ For annotated tags prepare message with commit messages since last tag.
 
 #+END_SRC
 
-* [[https://github.com/larstvei/Focus][focus]]
-
-focus on the important stuff.
-
-#+BEGIN_SRC emacs-lisp
-  (if (>= emacs-major-version 24)
-      (progn
-        (add-to-list 'load-path "~/.emacs.d/elpa/focus-20160111.522")
-        (require 'focus)
-        (setq focus-dimness -1)
-  ))
-#+END_SRC
 
 * fullframe
 open ibuffer and magit-status in fullframe mode.
@@ -362,7 +349,6 @@ search the web on your fingertips. C-c /.
 |---+-------------|
 | a | amazon.de   |
 | b | bing        |
-| c | cfengine    |
 | g | google      |
 | G | github      |
 | m | google maps |
@@ -386,13 +372,6 @@ search the web on your fingertips. C-c /.
               :browser 'eww-browse-url
               :keybinding "b"
               )
-
-            (defengine cfengine
-              "https://docs.cfengine.com/latest/search.html?q=%s"
-              :browser 'eww-browse-url
-              :keybinding "c"
-              )
-
 
             (defengine github
               "http://www.github.com/search?q=%s"
@@ -448,8 +427,7 @@ search the web on your fingertips. C-c /.
 * yasnippet
 
 My first thought: Nice. But do I have a use case? After half a year I
-cannot live without it. I write most of my [[http://www.cfengine.com][CFEngine]] code with
-snippets. Some help for Perl and even for org-mode.
+cannot live without it. Some help for Perl and even for org-mode.
 Thought about using snippets for shell-mode and eshell-mode?
 snippets for =aws cli= are awesome!
 =ha-autoinsert-yas-expand= copied from Howard Abrams.
@@ -502,35 +480,6 @@ Default to snippet-mode if we are in a sub directory of snippets:
 
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.emacs.d/snippets/[^/]*/" . snippet-mode))
-#+END_SRC
-
-* define some major modes for yasnippets
-[2016-05-25 Wed 10:26]
-
-I use yasnippet for sql a lot.
-Languages differ and I need different templates.
-
-#+BEGIN_SRC emacs-lisp
-  (define-derived-mode sql-oracle-mode sql-mode "OracleSQL"
-    "Major mode for ORACLE SQL"
-    (setq sql-product 'oracle)
-    )
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-    (define-derived-mode sql-vertica-mode sql-mode "VerticaSQL"
-      "Major mode for Vertica"
-      (setq sql-product 'ansi)
-      )
-
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (define-derived-mode sql-mysql-mode sql-mode "MySQL"
-    "Major mode for MySQL"
-    (setq sql-product 'mysql)
-    )
-
 #+END_SRC
 
 * [[https://github.com/flycheck/flycheck][flycheck]]
@@ -680,16 +629,6 @@ with [[help:avy-goto-line][avy-goto-line]].
 
 #+END_SRC
 
-* ace-jump-mode
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (add-to-list 'load-path "~/.emacs.d/elpa/ace-jump-mode-20140616.115")
-  (require 'ace-jump-mode)
-  (define-key global-map (kbd "C-c C-@") 'ace-jump-mode)
-  (define-key global-map (kbd "C-c C-SPC") 'ace-jump-mode)
-
-#+END_SRC
-
 * ido-mode
 
 I still like ido-find-file.
@@ -703,29 +642,7 @@ I still like ido-find-file.
         ido-create-new-buffer 'always
         ido-use-filename-at-point nil
         ido-max- 10)
-  ;; (require 'ido-vertical-mode)
-  ;; (ido-vertical-mode)
 
-  ;; (defun sd/ido-define-keys() ;; C-n/p is more intuitive in vertical layout
-  ;;   (define-key ido-completion-map (kbd "C-n") 'ido-next-match)
-  ;;   (define-key ido-completion-map (kbd "<down>") 'ido-next-match)
-  ;;   (define-key ido-completion-map (kbd "C-p") 'ido-prev-match)
-  ;;   (define-key ido-completion-map (kbd "<up>") 'ido-prev-match)
-  ;; )
-
-
-#+END_SRC
-
-* visual-regexp
-
-#+BEGIN_SRC emacs-lisp
-  (if (>= emacs-major-version 24)
-      (progn
-        (require 'visual-regexp)
-        (define-key global-map (kbd "M-&") 'vr/query-replace)
-        (define-key global-map (kbd "M-/") 'vr/replace)
-        )
-  )
 #+END_SRC
 
 * org-mode
@@ -780,16 +697,12 @@ javascript:location.href='org-protocol://capture:/l/'%20+%20encodeURIComponent(l
   (setq org-agenda-files (list "~/workorg/work.org"
                                "~/org/notes.org"
                                "~/org/emacs.org"
-                               "~/org/private.org"
-                               "~/org/it.org"
                                "~/org/refile.org"
                                "~/org/workhours.org"
                                ))
   (setq org-agenda-files (list "~/org/work.org"
                                "~/org/notes.org"
                                "~/org/emacs.org"
-                               "~/org/private.org"
-                               "~/org/it.org"
                                "~/org/refile.org"
                                "~/org/workhours.org"
                                ))
@@ -808,6 +721,8 @@ Org-mode export backend for JIRA markup
 #+END_SRC
 
 A little macro to speed things up:
+
+Bound to C-c J stores the org subtree as Jira markup language in clipboard.
 
 #+BEGIN_SRC emacs-lisp
   (fset 'bba-org-export-jira-clipboard
@@ -833,21 +748,6 @@ A little macro to speed things up:
        (perl . t)
        ))
 
-    ;;(setq org-html-preamble nil
-    ;;     org-html-postamble nil
-    ;;      org-html-head "")
-
-    ;; (setq org-html-preamble nil
-    ;;       org-html-postamble nil
-    ;;       org-html-include-default-style nil
-    ;;       org-html-head ""
-    ;;       org-export-html-with-timestamp nil
-    ;;       org-export-html-style "body-only"
-    ;; )
-    ;; body-only option ?
-
-    ;; (setq html (org-export-as-html 3 nil nil 1))
-
 
 #+END_SRC
 
@@ -872,12 +772,21 @@ Very useful for repetitive literate devops jobs.
 
 ** Define some shortcuts to access major org files.
 
+| Key          | File                   |
+|--------------+------------------------|
+| C-c F5       | notes                  |
+| C-c F8       | workhours              |
+| C-c F6       | work notes             |
+| C-c Shift F6 | work notes archive     |
+| C-c F9       | emacs cheat sheet      |
+| C-c F10      | main emacs config file |
+
+
 #+BEGIN_SRC emacs-lisp
 
 
   (global-set-key (kbd "C-c <f5>") '(lambda () (interactive) (find-file "~/org/notes.org")))
 
-  (global-set-key (kbd "C-c <f7>") '(lambda () (interactive) (find-file "~/org/private.org")))
   (global-set-key (kbd "C-c <f8>") '(lambda () (interactive) (find-file "~/org/workhours.org")))
   (if (equal "work" (getenv "SYSENV"))
       (progn
@@ -1220,46 +1129,6 @@ taken from http://doc.norang.ca/org-mode.org
 
 #+END_SRC
 
-** youtube links
-
-Thanks to [[http://endlessparentheses.com/embedding-youtube-videos-with-org-mode-links.html][endlessparentheses]]: Youtube makes it pretty simple
-to embed videos, they give you the entire iframe HTML code to use, but
-this wouldn’t really be Emacs if we couldn’t make things just a little
-bit easier.
-
-#+BEGIN_SRC emacs-lisp
-  (defvar yt-iframe-format
-    ;; You may want to change your width and height.
-    (concat "<iframe width=\"440\""
-            " height=\"335\""
-            " src=\"https://www.youtube.com/embed/%s\""
-            " frameborder=\"0\""
-            " allowfullscreen>%s</iframe>"))
-
-  (org-add-link-type
-   "yt"
-   (lambda (handle)
-     (browse-url
-      (concat "https://www.youtube.com/embed/"
-              handle)))
-   (lambda (path desc backend)
-     (cl-case backend
-       (html (format yt-iframe-format
-                     path (or desc "")))
-       (latex (format "\href{%s}{%s}"
-                      path (or desc "video"))))))
-#+END_SRC
-
-To use this, just write your org links in the following way (optionally adding a description).
-
-[[yt:A3JAlWM8qRM]]
-
-When you export to HTML, this will produce that same inlined snippet
-that Youtube specifies. The advantage (over simply writing out the
-iframe) is that this link can be clicked in org-mode, and can be
-exported to other formats as well.
-
-
 ** org-mime-org-buffer-htmlize
 
 Use =C-c M= to send a multipart email with .org as text and exported
@@ -1290,127 +1159,6 @@ html.
 
 #+BEGIN_SRC emacs-lisp
   (setq org-hide-emphasis-markers t)
-#+END_SRC
-
-* CFEngine
-
-#+BEGIN_SRC emacs-lisp
-  ;;   (load-library "cfengine")
-     (load-file (expand-file-name "~/.emacs.d/lisp/cfengine.el"))
-     (add-to-list 'auto-mode-alist '("\\.cf$" . cfengine3-mode))
-
-     ;; post-commit and post-merge hook for git:
-     ;; #!/bin/bash
-     ;; rm .git/etags
-     ;; find ${PWD} -type f -regex ".*\(\.cf\|_pl\.dat\|_conf.dat\)" | xargs etags --append --output=.git/etags
-     ;; set link for emacs:
-     ;; ln -s ~/.cfagent/inputs/../.git/etags ~/.cfengine_tags
-
-     (defun load-git-cfengine ()
-       "Load config and tags file of git cfengine repo"
-     (interactive) (visit-tags-table "~/.cfengine_tags")
-     (interactive) (find-file "~/.cfagent/inputs/config.cf")
-     )
-
-     ;; cfe-config-adduser-ldap runs ldapsearch with cn=user to fill some values.
-
-     (defun cfe-config-adduser-ldap ( user )
-       "Insert usertemplate based on ldap information for config.cf"
-       (interactive "sUser: ")
-       (insert "      \"users[" user "][login]\" string => \"" user "\";
-           \"users[" user "][fullname]\" string => \"" (substring ( shell-command-to-string (concat "ldapse " user " givenName ")) 0 -1) " " (substring ( shell-command-to-string (concat "ldapse " user " sn ")) 0 -1) "\";
-           \"users[" user "][uid]\" string => \"" (substring ( shell-command-to-string (concat "ldapse " user " uidNumber")) 0 -1) "\";
-           \"users[" user "][gid]\" string => \"" (substring ( shell-command-to-string (concat "ldapse " user " uidNumber")) 0 -1)"\";
-           \"users[" user "][group]\" string => \"" user "\";
-           \"users[" user "][groups]\" string => \"adm,apache,games\";
-           \"users[" user "][home]\" string => \"/home/" user "\";
-           \"users[" user "][shell]\" string => \"/bin/bash\";
-           \"users[" user "][flags]\" string => \"-m\";
-           \"users[" user "][authorized_keys][0]\" string => \"\";" )
-
-     )
-
-     (defun cfe-config-adduser ( user )
-       "Insert usertemplate for config.cf"
-       (interactive "sUser: ")
-       (insert "      \"users[" user "][login]\" string => \"" user "\";
-           \"users[" user "][fullname]\" string => \"\";
-           \"users[" user "][uid]\" string => \"\";
-           \"users[" user "][gid]\" string => \"\";
-           \"users[" user "][group]\" string => \"" user "\";
-           \"users[" user "][groups]\" string => \"" user "\";
-           \"users[" user "][home]\" string => \"/home/" user "\";
-           \"users[" user "][shell]\" string => \"/bin/bash\";
-           \"users[" user "][flags]\" string => \"-m\";
-           \"users[" user "][authorized_keys][0]\" string => \"\";" )
-
-     )
-
-     (add-hook 'cfengine3-mode-hook
-       (lambda ()
-         (which-function-mode)
-
-         (define-key cfengine3-mode-map "\C-c\S-t" (lambda()
-                                                     (interactive)
-                                                     (shell-command "~/bin/cfengine_update_testing.sh" )))
-         (define-key cfengine3-mode-map "\C-cu" 'cfe-config-adduser-ldap)
-         (define-key cfengine3-mode-map "\C-c\C-c" 'compile)
-         (define-key cfengine3-mode-map "\C-c," (lambda()
-                                                   (interactive)
-                                                   (browse-url (concat "https://docs.cfengine.com/latest/search.html?q=" (word-at-point)))))
-           (define-key cfengine3-mode-map "\C-h\C-y" '(lambda () (interactive) (find-file "~/.emacs.d/snippets/cfengine3-mode.org")))
-         ))
-
-
-#+END_SRC
-
-for C-c T you can use a file like this one:
-
-#+NAME: ~/bin/cfengine_update_testing.sh
-#+BEGIN_SRC sh :tangle no
-  #!/bin/bash
-  :<<cut
-  =cut
-
-  =pod
-
-  =head1 NAME
-
-  cfengine_update_testing
-
-  =head1 DESCRIPTION
-
-  sync cfengine inputs to agtest03 and run failsafe.
-
-  =cut
-
-  cf-promises -D customlib_active || exit 3
-  rsync -av --progress --delete -e ssh ~/.cfagent/inputs/ agtest03:/var/cfengine/masterfiles/
-  ssh agtest03 "/usr/local/sbin/cf-agent -f /var/cfengine/inputs/failsafe.cf"
-
-  :<<=cut
-
-  =head1 AUTHOR
-
-  Andreas Gerler <baron@bundesbrandschatzamt.de>
-
-  =cut
-#+END_SRC
-
-* Puppet
-[2016-02-29 Mon 16:36]
-
-#+BEGIN_SRC emacs-lisp
-  (add-to-list 'auto-mode-alist '("\\.erb$" . rhtml-mode))
-#+END_SRC
-
-* Ruby
-[2016-03-11 Fri 12:18]
-
-Vagrant files are Ruby, so use ruby-mode for them:
-
-#+BEGIN_SRC emacs-lisp
-  (add-to-list 'auto-mode-alist '("Vagrantfile" . ruby-mode))
 #+END_SRC
 
 * mwheel
@@ -1459,118 +1207,6 @@ With this you can do /sudo:ssh-host:file-on-ssh-host
   (add-to-list 'tramp-default-proxies-alist '(".*" "\`root\'" "/ssh:%h:"))
 #+END_SRC
 
-* [[http://www.twmode.sourceforge.net/][twitter]]
-
-#+BEGIN_SRC emacs-lisp
-  (add-to-list 'load-path "~/.emacs.d/elpa/twittering-mode-20160207.156")
-  (require 'twittering-mode)
-  (cond
-   ((string-equal system-type "gnu/linux")
-    (progn
-      (setq twittering-cert-file "/etc/ssl/certs/ca-bundle.crt") )
-    )
-  )
-
-  (setq twittering-use-master-password t)
-
-  (if (getenv "http_proxy")
-      (twittering-toggle-proxy))
-
-#+END_SRC
-
-* [[http://www.mew.org][mew]] email
-
-#+BEGIN_SRC emacs-lisp
-  (autoload 'mew "mew" nil t)
-  (autoload 'mew-send "mew" nil t)
-
-  ;; Optional setup (Red Mail menu):
-  (setq read-mail-command 'mew)
-
-  ;; Optional setup (e.g. C-xm for sending a message):
-  (autoload 'new-user-agent-compose "mew" nil t)
-
-  (if (boundp 'mail-user-agent)
-      (setq mail-user-agent 'mew-user-agent))
-  (if (fboundp 'define-mail-user-agent)
-      (define-mail-user-agent
-        'mew-user-agent
-        'mew-user-agent-compose
-        'mew-draft-send-message
-        'mew-draft-kill
-        'mew-send-hook))
-#+END_SRC
-
-When booting, Mew reads the file [[~/.mew.el]]. All Mew configurations
-should be written in this file.
-
-To configure your e-mail address, the followings are necessary.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  ;; (setq mew-name "your name") ;; (user-full-name)
-  ;; (setq mew-user "user name of e-mail address") ;; (user-login-name)
-  (setq mew-mail-domain "domain of e-mail address")
-#+END_SRC
-
-To send e-mail messages by SMTP, the following is necessary.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq mew-smtp-server "your SMTP server") ;; if not localhost
-  ;; (setq mew-smtp-ssl t)
-  ;; (setq mew-smtp-port "587")
-
-#+END_SRC
-
-If you want to use POP to receive e-mail messages, the followings are
-necessary.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  ;; (setq mew-pop-user "your POP account") ;; (user-login-name)
-  (setq mew-pop-server "your POP server") ;; if not localhost
-#+END_SRC
-
-If you want to use a local mailbox to receive e-mail messages, the
-followings are necessary.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  ;; To use local mailbox "mbox" or "maildir" instead of POP
-  (setq mew-mailbox-type 'mew)
-  (setq new-mbox-command "incm")
-  (setq mew-mbox-command-arg "-u -d /path/to/mbox")
-  ;; If /path/to/mbox is a file, it means "mbox".
-  ;; If /path/to/mbox is a directory, it means "maildir".
-#+END_SRC
-
-If you want to use IMAP to receive e-mail-messages, the followings are
-necessary.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq mew-proto "%")
-  ;; (setq mew-imap-user "your IMAP account) ;; (user-login-name)
-  (setq mew-imap-server "your IMAP server") ;; if not localhost
-  ;; (setq mew-imap-ssl t)
-  ;; (setq mew-imap-port "993)
-  ;; (setq mew-prog-ssl-arg "fips=no\nverify=0\n")
-#+END_SRC
-
-To read and/or write articles of NetNews, the followings are
-necessary.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  ;; (setq mew-nntp-user "your NNTP account")
-  (setq mew-nntp-server "your NNTP server")
-#+END_SRC
-
-* elfeed
-#+BEGIN_SRC emacs-lisp
-  (if (>= emacs-major-version 24)
-      (progn
-        (add-to-list 'load-path "~/.emacs.d/elpa/elfeed-20150608.13027")
-        (add-to-list 'load-path "~/.emacs.d/elpa/elfeed-org-20150412.145")
-        (require 'elfeed-org)
-        (elfeed-org)
-        (setq rmh-elfeed-org-files (list "~/org/elfeed.org"))))
-#+END_SRC
 
 * [[http://www.emacswiki.org/emacs/MalyonMode][Mylon]]
 
@@ -1597,17 +1233,6 @@ necessary.
       (when (not (display-graphic-p))
         (setenv "GPG_AGENT_INFO" agent))))
 
-  ;; (defadvice epg--start (around advice-epg-disable-agent disable)
-  ;;   "Don't allow epg--start to use gpg-agent in plain text terminals."
-  ;;   (if (display-graphic-p)
-  ;;       ad-do-it
-  ;;     (let ((agent (getenv "GPG_AGENT_INFO")))
-  ;;       (setenv "GPG_AGENT_INFO" nil) ; give us a usable text password prompt
-  ;;       ad-do-it
-  ;;       (setenv "GPG_AGENT_INFO" agent))))
-  ;; (ad-enable-advice 'epg--start 'around 'advice-epg-disable-agent)
-  ;; (ad-activate 'epg--start)
-
 #+END_SRC
 
 * Perl
@@ -1630,7 +1255,6 @@ necessary.
   (add-to-list 'ac-dictionary-directories "~/.emacs.d/elpa/auto-complete-20160107.8")
   (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
   (ac-config-default)
-  (add-to-list 'ac-modes 'cfengine3-mode)
   (add-to-list 'ac-modes 'dns-mode)
   (add-to-list 'ac-sources 'ac-source-yasnippet)
 
@@ -1716,18 +1340,6 @@ like these:
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (eval-after-load "cfengine3-mode"
-    '(add-hook 'cfengine3-mode-hook (lambda() (add-hook 'write-contents-functions
-                                                   (lambda()
-                                                      (unless (boundp 'bba-keep-whitespaces)
-                                                        (save-excursion
-                                                          (delete-trailing-whitespace)))
-                                                      )
-                                                   )
-                                 )
-               ))
-
-
   (eval-after-load "cperl-mode"
     '(add-hook 'cperl-mode-hook (lambda() (add-hook 'write-contents-functions
                                                     (lambda()
@@ -1766,17 +1378,6 @@ like these:
                                 )
                ))
 
-  (eval-after-load "puppet-mode"
-    '(add-hook 'puppet-mode-hook (lambda() (add-hook 'write-contents-functions
-                                                   (lambda()
-                                                      (unless (boundp 'bba-keep-whitespaces)
-                                                        (save-excursion
-                                                          (delete-trailing-whitespace)))
-                                                      )
-                                                   )
-                                 )
-               ))
-
   (eval-after-load "text-mode"
     '(add-hook 'text-mode-hook (lambda() (add-hook 'write-contents-functions
                                                    (lambda()
@@ -1787,9 +1388,6 @@ like these:
                                                    )
                                  )
                ))
-
-
-
 
 #+END_SRC
 
@@ -1841,10 +1439,6 @@ Use undo-tree.
   ( if (not window-system)
       (menu-bar-mode -1)
     )
-
-  (if window-system
-      (tool-bar-mode -1)
-  )
 
   (setq initial-scratch-message "") ;; Uh, I know what Scratch is for
 
@@ -2088,6 +1682,7 @@ Use =C-c E= to evaluate and replace the last s-expression.
 #+END_SRC
 
 * goto-match-paren
+
 #+BEGIN_SRC emacs-lisp
       (defun goto-match-paren (arg)
         "Go to the matching parenthesis if on parenthesis, otherwise insert %.
@@ -2304,8 +1899,6 @@ combine key strokes to access commands even faster.
   (require 'key-chord)
   (key-chord-mode 1)
   (setq key-chord-two-keys-delay 0.16)
-  (key-chord-define cfengine3-mode-map ";;" "\C-e;")
-  (key-chord-define cfengine3-mode-map ",," "\C-e,")
   (key-chord-define prog-mode-map ";;" "\C-e;")
   (key-chord-define prog-mode-map ",," "\C-e,")
   (key-chord-define-global "uu" 'undo)
@@ -2398,7 +1991,6 @@ function to convert groups of spaces to hard tabs.
   (define-key bba/launcher "c" 'helm-calcul-expression)
   (define-key bba/launcher "d" 'ediff-buffers)
   (define-key bba/launcher "e" 'eshell)
-  (define-key bba/launcher "E" 'elfeed)
   (define-key bba/launcher "i" 'ielm)
   (define-key bba/launcher "k" 'bba/keyboard-maestro)
   (define-key bba/launcher "m" 'bba/multiple-cursors)
@@ -2407,7 +1999,6 @@ function to convert groups of spaces to hard tabs.
   (define-key bba/launcher "S" 'synonyms)
   (define-key bba/launcher "\C-s" 'helm-swoop)
   (define-key bba/launcher "t" 'git-timemachine)
-  (define-key bba/launcher "T" 'twittering-mode)
 
   (define-prefix-command 'bba/keyboard-maestro)
   (define-prefix-command 'bba/multiple-cursors)
@@ -2421,7 +2012,6 @@ function to convert groups of spaces to hard tabs.
 
   (define-key global-map "\C-ci" 'imenu)
   (define-key global-map "\C-c\S-g" 'rgrep)
-  (define-key global-map "\C-cf" 'load-git-cfengine)
 
   (define-key global-map "\C-c\C-w" 'fixup-whitespace)
 
@@ -2676,15 +2266,6 @@ XML indentation
 * other stuff
 
 #+BEGIN_SRC emacs-lisp
-
-  ;;(move-overlay hl-line-overlay
-  ;;            (line-beginning-position) (1+ (line-end-position))
-  ;;            (current-buffer))
-
-  ;; (set-face-background-pixmap 'default "~/.emacs.d/xemacs-bg.xpm")
-  (set-foreground-color "green")
-  (set-background-color "black")
-
   ;; pos1: goto start of line, start of screen, start of buffer
   ;; end: goto end of line, end of screen, end of buffer
 
@@ -2719,10 +2300,6 @@ XML indentation
             (end-of-line))
            (t
             (goto-char (point-max)))))))
-
-
-
-
 #+END_SRC
 
 There are a few applications, such as crontab, that require a trailing
@@ -2744,26 +2321,26 @@ You have to work hard to be lazy.
 [[https://emacsfodder.github.io/emacs-theme-editor/][Emacs Theme Editor]] is a nice tool to define your colors.
 
 #+BEGIN_SRC emacs-lisp
-   (deftheme bba1 "DOCSTRING for bba1")
-     (custom-theme-set-faces 'bba1
-      '(default ((t (:foreground "#07e30d" :background "#282828" ))))
-      '(cursor ((t (:background "#f09213" ))))
-      '(fringe ((t (:background "#131313" ))))
-      '(mode-line ((t (:foreground "#282828" :background "#d96503" ))))
-      '(region ((t (:background "#7a7674" ))))
-      '(secondary-selection ((t (:background "#584e47" ))))
-      '(font-lock-builtin-face ((t (:foreground "#fe8019" ))))
-      '(font-lock-comment-face ((t (:foreground "#df7114" ))))
-      '(font-lock-function-name-face ((t (:foreground "#b8bb26" ))))
-      '(font-lock-keyword-face ((t (:foreground "#fb4934" ))))
-      '(font-lock-string-face ((t (:foreground "#b8bb26" ))))
-      '(font-lock-type-face ((t (:foreground "#d3869b" ))))
-      '(font-lock-constant-face ((t (:foreground "#d3869b" ))))
-      '(font-lock-variable-name-face ((t (:foreground "#83a598" ))))
-      '(minibuffer-prompt ((t (:foreground "#b8bb26" :bold t ))))
-      '(font-lock-warning-face ((t (:foreground "red" :bold t ))))
-      )
-   (provide-theme 'bba1)
+  ;; (deftheme bba1 "DOCSTRING for bba1")
+  ;; (custom-theme-set-faces 'bba1
+  ;;     '(default ((t (:foreground "#07e30d" :background "#282828" ))))
+  ;;     '(cursor ((t (:background "#f09213" ))))
+  ;;     '(fringe ((t (:background "#131313" ))))
+  ;;     '(mode-line ((t (:foreground "#282828" :background "#d96503" ))))
+  ;;     '(region ((t (:background "#7a7674" ))))
+  ;;     '(secondary-selection ((t (:background "#584e47" ))))
+  ;;     '(font-lock-builtin-face ((t (:foreground "#fe8019" ))))
+  ;;     '(font-lock-comment-face ((t (:foreground "#df7114" ))))
+  ;;     '(font-lock-function-name-face ((t (:foreground "#b8bb26" ))))
+  ;;     '(font-lock-keyword-face ((t (:foreground "#fb4934" ))))
+  ;;     '(font-lock-string-face ((t (:foreground "#b8bb26" ))))
+  ;;     '(font-lock-type-face ((t (:foreground "#d3869b" ))))
+  ;;     '(font-lock-constant-face ((t (:foreground "#d3869b" ))))
+  ;;     '(font-lock-variable-name-face ((t (:foreground "#83a598" ))))
+  ;;     '(minibuffer-prompt ((t (:foreground "#b8bb26" :bold t ))))
+  ;;     '(font-lock-warning-face ((t (:foreground "red" :bold t ))))
+  ;;     )
+  ;;  (provide-theme 'bba1)
 
   (if (display-graphic-p)
       (progn
@@ -2875,48 +2452,6 @@ all in your history.
 
 #+END_SRC
 
-* start ssh in screen session
-[2016-02-11 Thu 12:42]
-
-This one uses Keyboard Maestro to launch a ssh in a screen session in iTerm2.
-Assumption clipboard is a dns name.
-
-#+BEGIN_SRC emacs-lisp
-  (defun bba-screen-start-ssh-to-clipboard (&optional arg)
-  "Use a macro in Keyboard Maestro to ssh into a system in iterm screen session."
-  (interactive)
-  (if arg
-      (kill-new (thing-at-point arg))
-    )
-  (shell-command "osascript -e \'tell app \"Keyboard Maestro Engine\" to do script \"screen-start-ssh-to-clipboard\"'" )
-  )
-
-  (defun bba-screen-start-ssh-to-fqdn-at-point()
-    "run ssh to fqdn in screen session. fallback to clipboard."
-    (interactive)
-    (bba-screen-start-ssh-to-clipboard 'fqdn)
-    )
-
-#+END_SRC
-
-
-* aws
-
-Use aws command line tool via Emacs.
-
-#+BEGIN_SRC emacs-lisp
-  (defun bba-aws-desc-instances ( profile name)
-    "query aws to get informations for running instances."
-    (interactive "sProfile: \nsName: ")
-    (switch-to-buffer (concat "*aws-" profile "-" name "*"))
-    (org-mode)
-    (message "querying aws for %s in profile %s" name profile)
-    (insert-string (shell-command-to-string (concat "aws ec2 describe-instances --profile " profile " --filters \"Name=tag-key,Values=Name,Name=tag-value,Values=" name "*\" --query \"Reservations[].Instances[?State.Name=='running'].[InstanceId, PublicDnsName]\" --output table")))
-    (message "done.")
-  )
-
-#+END_SRC
-
 * thing-at-point-fqdn
 [2016-02-12 Fri 14:13]
 
@@ -2974,221 +2509,4 @@ Display greetings:
   (switch-to-buffer "*Tip of the day*")
   (delete-other-windows)
   (message "All done, %s!" (user-login-name) )
-#+END_SRC
-
-Split and show workhours:
-
-#+BEGIN_SRC emacs-lisp
-  (if (equal "work" (getenv "SYSENV"))
-    (progn (split-window-below)
-           (other-window 1)
-           (find-file "~/org/workhours.org")
-           (beginning-of-buffer)
-           (org-shifttab 3)
-           (re-search-forward (concat "^\*\* "(format-time-string "%Y-%m")))
-           (org-beginning-of-line)
-           ))
-
-#+END_SRC
-
-    [2014-08-27 Wed 11:02]
-* old config
-
-#+BEGIN_SRC emacs-lisp :eval no :tangle no
-
-
-
-
-
-    (setq org-html-head "<style type=\"text/css\">
-body {
-    background-color: #bbbbbb;
-}     </style>")
-
-
-  body {
-      background-color: #bbbbbb;
-      color: #000000;
-      margin: 0px;
-      padding: 0px;
-      height: 100%;
-  }'
-
-
-
-    ;;; * Big Brother Database
-
-    ;; (require 'bbdb)
-    ;; (bbdb-initialize)
-
-    ;;; * auto-completion
-
-    ;;(move-overlay hl-line-overlay
-    ;;            (line-beginning-position) (1+ (line-end-position))
-    ;;            (current-buffer))
-
-    ;; (set-face-background-pixmap 'default "~/.emacs.d/xemacs-bg.xpm")
-    (set-foreground-color "green")
-    (set-background-color "black")
-
-    ;; pos1: goto start of line, start of screen, start of buffer
-    ;; end: goto end of line, end of screen, end of buffer
-
-    (global-set-key '[(home)] 'chb-home)
-    (global-set-key '[(end)] 'chb-end)
-    ;;
-    (defun chb-home ()
-    (interactive)
-    (setq zmacs-region-stays t)
-    (if (not (bolp))
-    (beginning-of-line)
-    (if (eq this-command last-command)
-    (cond
-     ((not (= (point) (window-start)))
-      (move-to-window-line 0)
-      (beginning-of-line))
-     (t
-      (goto-char (point-min)))))))
-
-    (defun chb-end ()
-    (interactive)
-    (setq zmacs-region-stays t)
-    (if (not (eolp))
-    (end-of-line)
-    (if (eq this-command last-command)
-    (cond
-     ((not (= (point) (save-excursion
-                        (move-to-window-line -1)
-                                (end-of-line)
-                                (point))))
-              (move-to-window-line -1)
-              (end-of-line))
-             (t
-              (goto-char (point-max)))))))
-
-
-
-
-    ;; safe files with #! in first line as user executable
-
-    (add-hook `after-safe-hook
-              #'(lambda ()
-                 (and (save-excursion
-                        (save-restriction
-                          (widen)
-                          (goto-char (point-min))
-                          (save-match-data
-                            (looking-at "^#!"))))
-                      (not (file-executable-p buffer-file-name))
-                      (shell-command (concat "chmod u+x " buffer-file-name))
-                      (message
-                       (concat "Saved as script: " buffer-file-name)))))
-
-    ;;
-    ;; list of recently opened files
-    ;;
-
-    ;; (load "recent-files")
-    ;; (setq recent-files-dont-include
-    ;;      '("~$" "tmp/." "INBOX" ".bbdb" ".newsrc." ))
-
-    ;; (setq recent-files-non-permanent-submenu t)
-    ;; (setq recent-files-commands-submenu t)
-    ;; (setq recent-files-number-of-entries 30)
-    ;; (recent-files-initialize)
-
-    ;;  Make the <ctrl> c F12 key toggle Whitespace mode on and off.  Whitespace mode causes
-    ;; all hard tabs to be highlighted.  You can also configure it to highlight space characters
-    ;; in a different color.  There is also an untabify function to convert hard tabs to the
-    ;; appropriate number of spaces, and a tabify function to convert groups of spaces to
-    ;; hard tabs.
-    (global-set-key (kbd "C-c <f12>") 'whitespace-mode)
-
-
-    ;; (add-hook 'find-file-hooks 'fume-setup-buffer)
-    ;; (add-hook 'Manual-mode-hook 'turn-on-fume-mode)
-
-    ;; (function-menu USE-MENUBAR RETURN-ONLY MENU-ITEM-FUNCTION)
-
-    ;;====================================================================
-    ;;The Following Code Will Enable Me To Use The "Fume" Package Which
-    ;;Creates, On The Menubar, A "Functions" Menu Containing The List Of
-    ;;All The Functions In The Buffer Being Currently Displayed.
-    ;;====================================================================
-    ;;
-    ;;Setq-Default Set The Default Value Of A Var.  This Def. Val. Is Seen
-    ;;In Buffers That *Don'T* Have Their Own Values For The Variable.
-
-    ;(require function-menu)
-    ;(Define-Key Global-Map 'F8 'Function-Menu)
-    ;(Add-Hook 'Find-File-Hooks 'Fume-Add-Menubar-Entry)
-    ;(Define-Key Global-Map "\C-Cl" 'Fume-List-Functions)
-    ;(Define-Key Global-Map "\C-Cg" 'Fume-Prompt-Function-Goto)
-    ;(Define-Key Global-Map '(Shift Button3) 'Mouse-Function-Menu)
-    ;(Define-Key Global-Map '(Meta  Button1) 'Fume-Mouse-Function-Goto)
-
-    ;(Add-Hook
-    ; 'Find-File-Hooks
-    ; (Function
-    ;  (Lambda()
-    ;    (If (And (String-Match "Xemacs" Emacs-Version)
-    ;             (Boundp 'Emacs-Major-Version)
-    ;            (Or (= Emacs-Major-Version 20)
-    ;                 (And
-    ;                  (= Emacs-Major-Version 19)
-    ;                 (>= Emacs-Minor-Version 13)))
-    ;             (Not (Eq Major-Mode 'Latex-Mode)))
-    ;        (Fume-Add-Menubar-Entry))
-    ;    )))
-
-
-    (define-key global-map "\C-ct" 'visit-tags-table)
-    (define-key global-map "\C-cf" 'tags-search)
-
-    (define-key global-map "\C-c\C-t" 'insert-timestamp)
-    (define-key global-map "\C-c\M-c" 'centered-cursor-mode)
-
-    (define-key global-map "\C-cf" 'load-git-cfengine)
-
-    (define-key global-map "\C-c\C-w" 'fixup-whitespace)
-
-
-    (define-key global-map "\M-g\M-d" 'magit-diff-unstaged)
-    (define-key global-map "\M-g\M-b" 'magit-branch-manager)
-    (define-key global-map "\M-gb" 'magit-blame-mode)
-    (define-key global-map "\C-cm" 'magit-status)
-
-    (define-key global-map "\C-cw" (lambda ()
-                                     (interactive)
-                                     (let ((woman-use-topic-at-point t))
-                                       (woman))))
-    (define-key global-map "\C-c\M-d" 'diff-buffer-with-file)
-
-    ;;; ** Use C-+ and C-- to adjust font size
-
-    (define-key global-map (kbd "C-+") 'text-scale-increase)
-    (define-key global-map (kbd "C--") 'text-scale-decrease)
-
-    ;; NUMBERIC KEYPAD. nice number pad conveniences as extra function keys
-
-    ;; (global-set-key (kbd "<kp-subtract>") 'ergoemacs-close-current-buffer)
-    ;; (global-set-key (kbd "<kp-divide>") 'ergoemacs-previous-user-buffer)
-    ;; (global-set-key (kbd "<kp-multiply>") 'ergoemacs-next-user-buffer)
-
-    ;; (global-set-key (kbd "<C-kp-divide>") 'ergoemacs-previous-emacs-buffer)
-    ;; (global-set-key (kbd "<C-kp-multiply>") 'ergoemacs-next-emacs-buffer)
-
-    ;; (global-set-key (kbd "<kp-decimal>") 'other-window)
-    ;; (global-set-key (kbd "<kp-0>") 'delete-window)
-    ;; (global-set-key (kbd "<kp-1>") 'delete-other-windows)
-    ;; (global-set-key (kbd "<kp-2>") 'split-window-vertically)
-    ;; (global-set-key (kbd "<kp-3>") 'xah-open-file-at-cursor)
-
-    ;; (global-set-key (kbd "<kp-9>") 'isearch-forward)
-
-    (setq custom-file
-          (expand-file-name "custom.el"
-                            (expand-file-name ".emacs.d" "~")))
-    (load-file user-init-file)
-    (load-file custom-file)
 #+END_SRC
