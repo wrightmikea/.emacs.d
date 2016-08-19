@@ -4,3 +4,32 @@ Might be useful for starters.
 Have a look at [[bba.org]] as this is the main configuration file.
 
 Enjoy! :-)
+
+Here are some links for starters:
+
+- [[https://www.gnu.org/software/emacs/][GNU Emacs]]
+- [[https://emacsformacosx.com][Emacs For Mac OSX X]]
+- [[http://irreal.org/blog/][Irreal]]
+- [[http://sachachua.com/blog/series/a-visual-guide-to-emacs/][A Visual Guide to Emacs]] by Sacha Chua
+- [[https://www.masteringemacs.org][Mastering Emacs]] a very good beginners book. Well spend money.
+- [[http://www.howardism.org][Howardisms]] Interesting Blog around Org-Mode.
+- [[http://www.bundesbrandschatzamt.de/~baron/blog/][My own blog]] with some Emacs related posts.
+- [[http://cestlaz.github.io/stories/emacs/][Using Emacs Series]]
+- [[http://ergoemacs.org/emacs/emacs.html][Ergo Emacs]] by Xah Lee
+- [[https://www.youtube.com/playlist?list=PLVtKhBrRV_ZkPnBtt_TD1Cs9PJlU0IIdE][OrgMode Tutorial]] by Rainer König
+- [[http://emacsrocks.com][Emacs Rocks!]]
+
+A few keybindings of my configuration:
+
+- C-c f9 - Press Ctrl and c followed by f9. Opens a Help file written
+  in orgmode.
+- C-c f10 - Press Ctrl and c followed by f10. Opens my main config
+  file.
+- C-x l - Press Ctrl and x followded by l. Wait a moment and you get a
+  list of following keybindings to lauch something.
+- C-c t - Press Ctrl and c followded by t. Wait a moment and you get a
+  list of things to toggle on and off.
+
+After you got used to Emacs you might want to read the bba.org file
+bound to C-c f10. You will find interesting modifications like
+pressing xx fast instead of M-x.
