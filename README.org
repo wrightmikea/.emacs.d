@@ -5,6 +5,13 @@ Have a look at [[bba.org]] as this is the main configuration file.
 
 Enjoy! :-)
 
+To use this configuration use Emacs 24.5 and run this in your home
+directory:
+
+#+BEGIN_SRC sh
+  git clone https://github.com/baron42bba/.emacs.d.git .emacs.d
+#+END_SRC
+
 Here are some links for starters:
 
 - [[https://www.gnu.org/software/emacs/][GNU Emacs]]
