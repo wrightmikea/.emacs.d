@@ -1182,6 +1182,20 @@ html.
   (setq org-src-fontify-natively t)
 #+END_SRC
 
+** [[http://emacs.stackexchange.com/questions/19037/org-babel-invoking-cmd-exe][windows stuff]]
+[2016-09-07 Wed 12:10]
+
+On windows we have to run cmdproxy.exe instead of sh.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'ob-sh)
+  (defadvice org-babel-sh-evaluate (around set-shell activate)
+    "Add header argument :shcmd that determines the shell to be called."
+    (let* ((org-babel-sh-command (or (cdr (assoc :shcmd params)) org-babel-sh-command)))
+      ad-do-it
+      ))
+
+#+END_SRC
 ** hide emphasis-markers
 
 #+BEGIN_SRC emacs-lisp
